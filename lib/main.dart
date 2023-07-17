@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'constant.dart';
 
-
 void main() {
   runApp(BilgiTest());
 }
@@ -26,15 +25,25 @@ class BilgiTest extends StatelessWidget {
 }
 
 class SoruSayfasi extends StatefulWidget {
-
   @override
   _SoruSayfasiState createState() => _SoruSayfasiState();
 }
 
 class _SoruSayfasiState extends State<SoruSayfasi> {
-  List <Widget> secimler= [
+  List<Widget> secimler = [
 //kdogruIconu, kdogruIconu,kyanlisIconu,kdogruIconu, kdogruIconu,kyanlisIconu
   ];
+  List<String> sorular = [
+    'Titanic gelmiş en büyük gemidir',
+    'Dünyadaki tavuk sayısı insan sayısından fazladır',
+    'Kelebeklerin ömrü bir gündür',
+    'Dünya düzdür',
+    'Kaju fıstığı aslında bir meyvenin sapıdır',
+    'Fatih Sultan Mehmet hiç patates yememiştir'
+  ];
+  List<bool> yanitlar = [false, true, false, false, true, true];
+  int soruIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,7 +56,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'Bilgi Testi Soruları',
+                sorular[soruIndex],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
@@ -58,14 +67,14 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
           ),
         ),
         Wrap(
-         // direction: Axis.horizontal, default tur
-          alignment: WrapAlignment.end,// sonda itibaren sol doğru artırma olur arapça gibi
+          // direction: Axis.horizontal, default tur
+          alignment: WrapAlignment
+              .start, // sonda itibaren sol doğru artırma olur arapça gibi
           // soldan sağa yazaar gibi yapa
           //alignment: WrapAlignment.center,// ortada başlar
           runSpacing: 10, // dikeyde aralarında boşluk bıraktı
-          spacing: 10,// yatayda aralarında boşluk bıraktı
-          children:secimler,
-//[secimler[2]] böyle bir kullanımla sadece bir tanesi alınabilir
+          spacing: 10, // yatayda aralarında boşluk bıraktı
+          children: secimler,
         ),
         Expanded(
           flex: 1,
@@ -82,7 +91,12 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                           ),
                           onPressed: () {
                             setState(() {
-                              secimler.add(kyanlisIconu); // bastıkca yeniden boyama yapacak
+
+                              yanitlar[soruIndex] == false
+                                  ? secimler.add(kdogruIconu)
+                                  : secimler.add(kyanlisIconu);
+                              soruIndex++;
+                              // secimler.add(kyanlisIconu); // bastıkca yeniden boyama yapacak
                               // ve secimler list ine ekleme yapacak
                             });
                           },
@@ -101,10 +115,13 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                                 Colors.green[400], //background yapmakla aynıdır
                           ),
                           onPressed: () {
+                            bool dogru = yanitlar[soruIndex];
                             setState(() {
-                              secimler.add(kdogruIconu);
+                              yanitlar[soruIndex] == true
+                                  ? secimler.add(kdogruIconu)
+                                  : secimler.add(kyanlisIconu);
+                              soruIndex++;
                             });
-
                           },
                           child: Icon(Icons.thumb_up, size: 30.0),
                         ))),
@@ -114,6 +131,5 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
     );
   }
 }
-
 
 
