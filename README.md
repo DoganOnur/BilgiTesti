@@ -4,5 +4,7 @@ Verilen bilgi soruların doğrularını bulma testidir. Verilen cevaba göre olu
 <br>
 <p float="left">
 <img hspace="5" src="assets/readme-files/1.png" width="150" />
+<img hspace="5" src="assets/readme-files/2.png" width="150" />
+<img hspace="5" src="assets/readme-files/3.png" width="150" />
 
 </p>
