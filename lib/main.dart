@@ -33,15 +33,15 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
   List<Widget> secimler = [
 //kdogruIconu, kdogruIconu,kyanlisIconu,kdogruIconu, kdogruIconu,kyanlisIconu
   ];
-  List<String> sorular = [
-    'Titanic gelmiş en büyük gemidir',
-    'Dünyadaki tavuk sayısı insan sayısından fazladır',
-    'Kelebeklerin ömrü bir gündür',
-    'Dünya düzdür',
-    'Kaju fıstığı aslında bir meyvenin sapıdır',
-    'Fatih Sultan Mehmet hiç patates yememiştir'
+  List<Soru> sorubankasi = [
+    Soru(soruMetni: 'Titanic gelmiş geçmiş en büyük gemidir', soruYaniti: false),
+    Soru(soruMetni: 'Dünyadaki tavuk sayısı insan sayısından fazladır', soruYaniti: true),
+    Soru(soruMetni: 'Kelebeklerin ömrü bir gündür', soruYaniti: false),
+    Soru(soruMetni: 'Dünya düzdür', soruYaniti: false),
+    Soru(soruMetni: 'Kaju fıstığı aslında bir meyvenin sapıdır', soruYaniti: true),
+    Soru(soruMetni: 'Fatih Sultan Mehmet hiç patates yememiştir', soruYaniti: true),
   ];
-  List<bool> yanitlar = [false, true, false, false, true, true];
+
   int soruIndex = 0;
 
   @override
@@ -56,7 +56,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                sorular[soruIndex],
+                sorubankasi[soruIndex].soruMetni,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
@@ -91,10 +91,11 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                           ),
                           onPressed: () {
                             setState(() {
-
-                              yanitlar[soruIndex] == false
-                                  ? secimler.add(kdogruIconu)
-                                  : secimler.add(kyanlisIconu);
+                              soruIndex == 6
+                                  ? soruIndex = 0
+                                  : sorubankasi[soruIndex].soruYaniti == false
+                                      ? secimler.add(kdogruIconu)
+                                      : secimler.add(kyanlisIconu);
                               soruIndex++;
                               // secimler.add(kyanlisIconu); // bastıkca yeniden boyama yapacak
                               // ve secimler list ine ekleme yapacak
@@ -115,11 +116,12 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                                 Colors.green[400], //background yapmakla aynıdır
                           ),
                           onPressed: () {
-                            bool dogru = yanitlar[soruIndex];
                             setState(() {
-                              yanitlar[soruIndex] == true
-                                  ? secimler.add(kdogruIconu)
-                                  : secimler.add(kyanlisIconu);
+                              soruIndex == 6
+                                  ? soruIndex = 0
+                                  : sorubankasi[soruIndex].soruYaniti == true
+                                      ? secimler.add(kdogruIconu)
+                                      : secimler.add(kyanlisIconu);
                               soruIndex++;
                             });
                           },
@@ -132,4 +134,8 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
   }
 }
 
-
+class Soru {
+  String soruMetni;
+  bool soruYaniti;
+  Soru({required this.soruMetni, required this.soruYaniti});
+}
