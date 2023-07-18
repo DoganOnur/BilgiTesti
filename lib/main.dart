@@ -1,3 +1,5 @@
+//import 'package:bilgitesti/soru.dart';--> bunu test_veri üzerinden çekmesi sağlandı.
+import 'package:bilgitesti/test_veri.dart';
 import 'package:flutter/material.dart';
 
 import 'constant.dart';
@@ -30,19 +32,53 @@ class SoruSayfasi extends StatefulWidget {
 }
 
 class _SoruSayfasiState extends State<SoruSayfasi> {
+  void butoncagir(bool secilenbuton) {
+    if (testVeri_1.testBittimi() == true) {
+      //alertdialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Tebrikler Testi Bitirdiniz!'),
+            content: Text(
+                'Verilen sorulara boş bırakmadan doldurdunuz.Hepsini doğru çıkması için tekrar deneyin.'
+                    'Kendinizi yeniden test etmek için Başa dönün!'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Başa Dön'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    //index sifirla
+                    testVeri_1.testSifirla();
+                    //secimler sifirla
+                    secimler = [];
+                  });
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      setState(() {
+        // : testVeri_1.sorubankasi[soruIndex].soruYaniti == false
+        //Encapsulation yapılmadığında açık kod verildi.
+        testVeri_1.getSoruYaniti() == secilenbuton
+            ? secimler.add(kdogruIconu)
+            : secimler.add(kyanlisIconu);
+        testVeri_1.sonrakiSoru();
+        //soruIndex++;
+        // secimler.add(kyanlisIconu); // bastıkca yeniden boyama yapacak
+        // ve secimler list ine ekleme yapacak
+      });
+    }
+  }
+
   List<Widget> secimler = [
 //kdogruIconu, kdogruIconu,kyanlisIconu,kdogruIconu, kdogruIconu,kyanlisIconu
   ];
-  List<Soru> sorubankasi = [
-    Soru(soruMetni: 'Titanic gelmiş geçmiş en büyük gemidir', soruYaniti: false),
-    Soru(soruMetni: 'Dünyadaki tavuk sayısı insan sayısından fazladır', soruYaniti: true),
-    Soru(soruMetni: 'Kelebeklerin ömrü bir gündür', soruYaniti: false),
-    Soru(soruMetni: 'Dünya düzdür', soruYaniti: false),
-    Soru(soruMetni: 'Kaju fıstığı aslında bir meyvenin sapıdır', soruYaniti: true),
-    Soru(soruMetni: 'Fatih Sultan Mehmet hiç patates yememiştir', soruYaniti: true),
-  ];
-
-  int soruIndex = 0;
+  TestVeri testVeri_1 = RandomTestVeri();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +92,8 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                sorubankasi[soruIndex].soruMetni,
+                // testVeri_1.sorubankasi[soruIndex].soruMetni,
+                testVeri_1.getSoruMetni(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
@@ -70,7 +107,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
           // direction: Axis.horizontal, default tur
           alignment: WrapAlignment
               .start, // sonda itibaren sol doğru artırma olur arapça gibi
-          // soldan sağa yazaar gibi yapa
+          // soldan sağa yazar gibi yapar
           //alignment: WrapAlignment.center,// ortada başlar
           runSpacing: 10, // dikeyde aralarında boşluk bıraktı
           spacing: 10, // yatayda aralarında boşluk bıraktı
@@ -90,16 +127,9 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                             backgroundColor: Colors.red[400],
                           ),
                           onPressed: () {
-                            setState(() {
-                              soruIndex == 6
-                                  ? soruIndex = 0
-                                  : sorubankasi[soruIndex].soruYaniti == false
-                                      ? secimler.add(kdogruIconu)
-                                      : secimler.add(kyanlisIconu);
-                              soruIndex++;
-                              // secimler.add(kyanlisIconu); // bastıkca yeniden boyama yapacak
-                              // ve secimler list ine ekleme yapacak
-                            });
+                            butoncagir(false);
+                            // testVeri_1.sorubankasi[soruIndex].soruYaniti == false;
+                            //bozuk kod. Encapsulation yapıldı.
                           },
                           child: Icon(
                             Icons.thumb_down,
@@ -116,14 +146,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                                 Colors.green[400], //background yapmakla aynıdır
                           ),
                           onPressed: () {
-                            setState(() {
-                              soruIndex == 6
-                                  ? soruIndex = 0
-                                  : sorubankasi[soruIndex].soruYaniti == true
-                                      ? secimler.add(kdogruIconu)
-                                      : secimler.add(kyanlisIconu);
-                              soruIndex++;
-                            });
+                            butoncagir(true);
                           },
                           child: Icon(Icons.thumb_up, size: 30.0),
                         ))),
@@ -132,10 +155,4 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
       ],
     );
   }
-}
-
-class Soru {
-  String soruMetni;
-  bool soruYaniti;
-  Soru({required this.soruMetni, required this.soruYaniti});
 }
